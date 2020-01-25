@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: consumer
+server:
+  port: 8082
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+feign:
+  hystrix:
+    enabled: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instance-id: consumer
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8081/getCurrentUser
+  client:
+    clientId: admin
+    clientSecret: admin123456
+    accessTokenUri: http://localhost:5000/uaa/oauth/token #获取Token
+    grant-type: authorization_code,password
+    scope: all
+info:
+  app.name: consumer
+  company.name: www.wanghuiwen.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$

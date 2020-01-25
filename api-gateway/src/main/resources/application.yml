@@ -1,18 +1,26 @@
+server:
+  port: 8084
+
 spring:
   application:
-    name: auth
-server:
-  port: 8081
+    name: gateway
+
 eureka:
   client:
-    serviceUrl:
+    service-url:
       defaultZone: http://localhost:8080/eureka/
   instance:
-    hostname: localhost
+    instance-id: gateway
     prefer-ip-address: true
-    instance-id: auth
+zuul:
+  prefix: /api
+  ignored-services: consumer
+  routes:
+    mydept.serviceId: consumer
+    mydept.path: /cu/**
+
 info:
-  app.name: auth
+  app.name: gateway
   company.name: www.wanghuiwen.com
   build.artifactId: $project.artifactId$
   build.version: $project.version$

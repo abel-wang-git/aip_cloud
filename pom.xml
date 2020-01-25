@@ -12,6 +12,9 @@
     <modules>
         <module>apt-eureka</module>
         <module>api-auth</module>
+        <module>api-consumer</module>
+        <module>api-hystrix-dashboard</module>
+        <module>api-gateway</module>
     </modules>
 
     <parent>
@@ -35,12 +38,42 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-eureka</artifactId>
+                <artifactId>spring-cloud-starter-oauth2</artifactId>
+                <version>2.2.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>1.1.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                <version>2.2.1.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+                <version>2.2.1.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-feign</artifactId>
                 <version>1.4.7.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-eureka-server</artifactId>
+                <artifactId>spring-cloud-starter-hystrix</artifactId>
+                <version>1.4.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-zuul</artifactId>
+                <version>1.4.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
                 <version>1.4.7.RELEASE</version>
             </dependency>
             <dependency>
@@ -52,6 +85,27 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <finalName>apicloud</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <delimiters>
+                        <delimit>$</delimit>
+                    </delimiters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <repositories>
         <repository>
