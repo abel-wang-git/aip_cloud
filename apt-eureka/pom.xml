@@ -6,7 +6,7 @@
 
   <parent>
     <groupId>com.wanghuiwen</groupId>
-    <artifactId>aip_cloud</artifactId>
+    <artifactId>aip-cloud</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 

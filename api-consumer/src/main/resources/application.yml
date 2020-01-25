@@ -3,6 +3,11 @@ spring:
     name: consumer
 server:
   port: 8082
+  servlet:
+    session:
+      cookie:
+        name: OAUTH2-CLIENT-SESSIONID
+
 management:
   endpoints:
     web:
@@ -19,16 +24,19 @@ eureka:
     hostname: localhost
     prefer-ip-address: true
     instance-id: consumer
+
 security:
   oauth2:
+    client:
+      client-id: admin
+      client-secret: admin123456
+      access-token-uri: http://localhost:8081/oauth/token
+      user-authorization-uri: http://localhost:8081/oauth/authorize
     resource:
-      user-info-uri: http://localhost:8081/getCurrentUser
-  client:
-    clientId: admin
-    clientSecret: admin123456
-    accessTokenUri: http://localhost:5000/uaa/oauth/token #获取Token
-    grant-type: authorization_code,password
-    scope: all
+      token-info-uri: http://localhost:8081/oauth/check_token
+      jwt:
+        key-uri: http://localhost:8081/oauth/token_key
+
 info:
   app.name: consumer
   company.name: www.wanghuiwen.com
