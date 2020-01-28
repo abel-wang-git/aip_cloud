@@ -1,4 +1,4 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.auth.config.auth;
 
 import com.wanghuiwen.auth.model.Power;
 import com.wanghuiwen.auth.model.Role;

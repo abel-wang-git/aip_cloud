@@ -1,4 +1,4 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.auth.config.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

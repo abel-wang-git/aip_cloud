@@ -1,4 +1,4 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.auth.config.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

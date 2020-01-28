@@ -47,6 +47,8 @@ security:
       token-info-uri: http://localhost:8081/oauth/check_token
       jwt:
         key-uri: http://localhost:8081/oauth/token_key
+    authorization:
+        check-token-access: http://localhost:8081/oauth/check_token
 
 info:
   app.name: consumer

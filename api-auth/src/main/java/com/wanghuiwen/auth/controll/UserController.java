@@ -2,7 +2,7 @@ package com.wanghuiwen.auth.controll;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wanghuiwen.auth.config.AuthUser;
+import com.wanghuiwen.auth.config.auth.AuthUser;
 import com.wanghuiwen.core.annotation.PowerEnable;
 import com.wanghuiwen.core.controller.Ctrl;
 import com.wanghuiwen.core.response.Result;

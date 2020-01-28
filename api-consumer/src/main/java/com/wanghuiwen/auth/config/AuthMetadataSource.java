@@ -5,10 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Collection;
-import java.util.List;
 
 public class AuthMetadataSource implements FilterInvocationSecurityMetadataSource {
     Logger logger =  LoggerFactory.getLogger(this.getClass());

@@ -1,4 +1,4 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.auth.config.mybatis;
 
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;

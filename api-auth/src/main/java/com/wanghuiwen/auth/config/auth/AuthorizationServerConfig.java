@@ -1,7 +1,6 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.auth.config.auth;
 
 import com.wanghuiwen.auth.config.execption.AuthExceptionTranslator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +34,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
+
+    @Resource
+    private DataSource dataSource;
 
     @Resource
     private UserDetailsServiceImpl userService;
@@ -41,6 +46,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public TokenStore RedisTokenStore() {
         return new JwtTokenStore(jwtAccessTokenConverter());
+    }
+
+    @Bean
+    public ClientDetailsService jdbcClientDetails() {
+        return new JdbcClientDetailsService(dataSource);
     }
 
     @Bean
@@ -64,24 +74,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .tokenStore(RedisTokenStore()) //配置令牌存储策略
                 .accessTokenConverter(jwtAccessTokenConverter())
                 .tokenEnhancer(enhancerChain)
-                .exceptionTranslator(new AuthExceptionTranslator());
+                .exceptionTranslator(new AuthExceptionTranslator())
+        ;
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("admin")
-                .secret(passwordEncoder().encode("admin123456"))
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(864000)
-                .redirectUris("http://localhost:8082/login") //单点登录时配置
-                .autoApprove(true) //自动授权配置
-                .scopes("all")
-                .authorizedGrantTypes("authorization_code","password","refresh_token");
-    }
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) {
-        security.tokenKeyAccess("isAuthenticated()"); // 获取密钥需要身份认证，使用单点登录时必须配置
+        clients.withClientDetails(jdbcClientDetails());
+
     }
 
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        //允许所有资源服务器访问公钥端点（/oauth/token_key）
+        //只允许验证用户访问令牌解析端点（/oauth/check_token）
+        security.allowFormAuthenticationForClients();
+        security.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()");
+                // 允许客户端发送表单来进行权限认证来获取令牌
+    }
 }

@@ -1,6 +1,5 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.auth.config.resource;
 
-import com.wanghuiwen.auth.model.Power;
 import com.wanghuiwen.auth.model.SysWhitelist;
 import com.wanghuiwen.auth.service.PowerService;
 import com.wanghuiwen.auth.service.SysWhitelistService;
@@ -11,7 +10,6 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,21 +32,9 @@ public class AuthMetadataSource implements FilterInvocationSecurityMetadataSourc
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        List<Power> powers =powerService.findAll();
         FilterInvocation filterInvocation = (FilterInvocation) object;
 
         if (isMatcherAllowedRequest(filterInvocation)) return null ; //return null 表示允许访问，不做拦截
-        HttpServletRequest request = filterInvocation.getHttpRequest();
-        String resUrl;
-        //URL规则匹配.
-        AntPathRequestMatcher matcher;
-        for(Power p : powers) {
-            resUrl=p.getUrl();
-            matcher = new AntPathRequestMatcher(resUrl);
-            if(matcher.matches(request)) {
-                return org.springframework.security.access.SecurityConfig.createList(p.getUrl());
-            }
-        }
         //没有有匹配到，需要指定相应的角色：
         return org.springframework.security.access.SecurityConfig.createList(filterInvocation.getRequestUrl());
     }
