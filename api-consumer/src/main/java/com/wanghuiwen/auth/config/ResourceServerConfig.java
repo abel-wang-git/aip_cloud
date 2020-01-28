@@ -15,6 +15,11 @@ public class ResourceServerConfig extends AbsResourceServerConfig {
     }
 
     @Override
+    protected void setWhitelist() {
+        //白名单添加
+    }
+
+    @Override
     public void configure(HttpSecurity http) throws Exception {
         super.configure(http);
     }
