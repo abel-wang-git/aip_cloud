@@ -1,6 +1,6 @@
 spring:
   application:
-    name: auth
+    name: blog
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -24,7 +24,12 @@ spring:
 feign:
   hystrix:
     enabled: true
-
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
 server:
   port: 8085
 
@@ -35,7 +40,7 @@ eureka:
   instance:
     hostname: localhost
     prefer-ip-address: true
-    instance-id: auth
+    instance-id: blog
 
 security:
   oauth2:
@@ -46,6 +51,7 @@ security:
       user-authorization-uri: http://localhost:8081/oauth/authorize
     resource:
       token-info-uri: http://localhost:8081/oauth/check_token
+      user-info-uri: http://localhost:8081/user/get
       jwt:
         key-uri: http://localhost:8081/oauth/token_key
     authorization:
@@ -58,7 +64,7 @@ upload:
 auth:
   whitelist: /article/list/index
 info:
-  app.name: auth
+  app.name: blog
   company.name: www.wanghuiwen.com
   build.artifactId: $project.artifactId$
   build.version: $project.version$

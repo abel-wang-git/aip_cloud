@@ -6,6 +6,7 @@ import com.wanghuiwen.auth.model.User;
 import com.wanghuiwen.auth.service.PowerService;
 import com.wanghuiwen.auth.service.UserService;
 import com.wanghuiwen.core.config.authserver.AuthUser;
+import com.wanghuiwen.core.config.authserver.Authority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,14 +39,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         List<Role> roles = userService.getRole(user.getId());
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<Authority> authorities = new ArrayList<>();
         List<String> rolestr = new ArrayList<>();
 
 
         List<Power> powers = new ArrayList<>();
         for (Role r : roles) {
             rolestr.add(r.getDescription());
-            authorities.add(new SimpleGrantedAuthority(r.getDescription()));
+            authorities.add(new Authority(r.getDescription()));
             List<Power> powers1 = powerService.getByRole(r.getId());
             if (powers1 != null) {
                 powers.addAll(powers1);
@@ -54,7 +55,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         if (powers.size() > 0) {
             for (Power p : powers) {
-                authorities.add(new SimpleGrantedAuthority(p.getUrl()));
+                authorities.add(new Authority(p.getUrl()));
             }
         }
 

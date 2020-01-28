@@ -9,11 +9,9 @@ import com.wanghuiwen.blog.model.ArticleList;
 import com.wanghuiwen.blog.service.ArticleContentService;
 import com.wanghuiwen.blog.service.UserService;
 import com.wanghuiwen.core.config.authserver.AuthUser;
-import com.wanghuiwen.core.model.User;
 import com.wanghuiwen.core.response.Result;
 import com.wanghuiwen.core.response.ResultGenerator;
 import com.wanghuiwen.core.service.AbstractService;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +43,8 @@ public class ArticleContentServiceImpl extends AbstractService<ArticleContent> i
         articleListMapper.updateByPrimaryKeySelective(articleList);
 
         ArticleContent content = articleContentMapper.selectByPrimaryKey(id);
-
-        User user = (User) userService.findById(articleList.getUid()).getData();
+        Result result = userService.findById(3L);
+//        User user = (User) result.getData();
 
         Map<String , Object> res = new HashMap<>();
         if(authUser!=null){
@@ -58,7 +56,7 @@ public class ArticleContentServiceImpl extends AbstractService<ArticleContent> i
         }
         res.put("list",articleList);
         res.put("content",content);
-        res.put("author",user);
+        res.put("author",result.getData());
         return ResultGenerator.genSuccessResult(res);
     }
 }

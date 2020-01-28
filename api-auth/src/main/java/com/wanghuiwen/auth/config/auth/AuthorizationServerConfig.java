@@ -60,6 +60,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
+
         delegates.add(jwtAccessTokenConverter);
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.authenticationManager(authenticationManager)

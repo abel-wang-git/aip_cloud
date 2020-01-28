@@ -1,6 +1,5 @@
 package com.wanghuiwen.core.config.authserver;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -8,24 +7,27 @@ import java.util.Collection;
 import java.util.List;
 
 public class AuthUser implements UserDetails, Serializable {
-    private String userName;
+    private String username;
     private String password;
     private Long id;
     private Byte type;
-    private List<GrantedAuthority> authorities;
+    private List<Authority> authorities;
     private List<String> roles;
     private String nickname;
     private String avatar;
 
-    public AuthUser(String userName,
+    public AuthUser() {
+    }
+
+    public AuthUser(String username,
                     String password,
-                    List<GrantedAuthority> authorities,
+                    List<Authority> authorities,
                     List<String> roles,
                     Long id,
                     byte type,
                     String nickname,
                     String avatar) {
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.authorities=authorities;
         this.roles=roles;
@@ -36,7 +38,7 @@ public class AuthUser implements UserDetails, Serializable {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends Authority> getAuthorities() {
         return this.authorities;
     }
 
@@ -47,7 +49,7 @@ public class AuthUser implements UserDetails, Serializable {
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class AuthUser implements UserDetails, Serializable {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public void setPassword(String password) {
@@ -94,7 +96,7 @@ public class AuthUser implements UserDetails, Serializable {
         this.type = type;
     }
 
-    public void setAuthorities(List<GrantedAuthority> authorities) {
+    public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
 
@@ -120,5 +122,9 @@ public class AuthUser implements UserDetails, Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getUserName() {
+        return username;
     }
 }
