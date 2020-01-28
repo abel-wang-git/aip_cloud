@@ -1,4 +1,4 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.blog.config;
 
 import com.wanghuiwen.core.config.resource.AbsResourceServerConfig;
 import org.springframework.boot.autoconfigure.security.oauth2.authserver.AuthorizationServerProperties;
@@ -12,6 +12,11 @@ public class ResourceServerConfig extends AbsResourceServerConfig {
 
     protected ResourceServerConfig(AuthorizationServerProperties properties) {
         super(properties);
+    }
+
+    @Override
+    protected void setWhitelist() {
+        whitelist.add("/article/list/index");
     }
 
     @Override

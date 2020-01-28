@@ -1,14 +1,22 @@
-package com.wanghuiwen.auth.config;
+package com.wanghuiwen.core.config.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Collection;
+import java.util.List;
 
 public class AuthMetadataSource implements FilterInvocationSecurityMetadataSource {
+    private  List<String> whitelist;
+
+    public AuthMetadataSource(List<String> whitelist) {
+        this.whitelist = whitelist;
+    }
+
     Logger logger =  LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -20,8 +28,7 @@ public class AuthMetadataSource implements FilterInvocationSecurityMetadataSourc
         FilterInvocation filterInvocation = (FilterInvocation) object;
 
         if (isMatcherAllowedRequest(filterInvocation)) return null ; //return null 表示允许访问，不做拦截
-        //URL规则匹配.
-        //没有有匹配到，需要指定相应的角色：
+
         return org.springframework.security.access.SecurityConfig.createList(filterInvocation.getRequestUrl());
     }
 
@@ -34,7 +41,9 @@ public class AuthMetadataSource implements FilterInvocationSecurityMetadataSourc
      * @return 是否在范围中
      */
     private boolean isMatcherAllowedRequest(FilterInvocation fi){
-        return false;
+        return  whitelist.stream().map(AntPathRequestMatcher::new)
+                .filter(requestMatcher -> requestMatcher.matches(fi.getHttpRequest()))
+                .toArray().length > 0;
     }
 
     @Override

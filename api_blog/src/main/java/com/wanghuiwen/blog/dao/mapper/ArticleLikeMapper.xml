@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wanghuiwen.blog.dao.ArticleLikeMapper">
+  <resultMap id="BaseResultMap" type="com.wanghuiwen.blog.model.ArticleLike">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="uid" jdbcType="BIGINT" property="uid" />
+    <id column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <select id="selectByUid" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select * from article_like where uid =#{userId} and article_id =#{id}
+  </select>
+</mapper>

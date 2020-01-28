@@ -43,22 +43,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Resource
     private UserDetailsServiceImpl userService;
 
-    @Bean
-    public TokenStore RedisTokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
-    }
+    @Resource
+    public TokenStore tokenStore;
 
     @Bean
     public ClientDetailsService jdbcClientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
 
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        accessTokenConverter.setSigningKey("test_key");//配置JWT使用的秘钥
-        return accessTokenConverter;
-    }
+    @Resource
+    public JwtAccessTokenConverter jwtAccessTokenConverter;
 
     /**
      * 使用密码模式需要配置
@@ -67,12 +61,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
-        delegates.add(jwtAccessTokenConverter());
+        delegates.add(jwtAccessTokenConverter);
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userService)
-                .tokenStore(RedisTokenStore()) //配置令牌存储策略
-                .accessTokenConverter(jwtAccessTokenConverter())
+                .tokenStore(tokenStore) //配置令牌存储策略
+                .accessTokenConverter(jwtAccessTokenConverter)
                 .tokenEnhancer(enhancerChain)
                 .exceptionTranslator(new AuthExceptionTranslator())
         ;

@@ -22,8 +22,6 @@ import java.util.List;
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
     @Resource
-    private PowerService powerService;
-    @Resource
     private SysWhitelistService sysWhitelistService;
 
 
@@ -35,7 +33,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        //        "/oauth/**", "/login/**", "/logout/**","/user/registered"
         List<SysWhitelist> whitelists=sysWhitelistService.selectAll();
         http.csrf()
                 .disable()
@@ -55,7 +52,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private class AuthObjectPostProcessor implements ObjectPostProcessor<FilterSecurityInterceptor> {
         @Override
         public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
-            fsi.setSecurityMetadataSource(new AuthMetadataSource(powerService,sysWhitelistService));
+            fsi.setSecurityMetadataSource(new AuthMetadataSource(sysWhitelistService));
             fsi.setAccessDecisionManager(new AuthAccessDecisionManager());
             return fsi;
         }

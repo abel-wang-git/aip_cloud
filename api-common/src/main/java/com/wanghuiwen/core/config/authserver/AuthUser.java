@@ -1,12 +1,13 @@
-package com.wanghuiwen.auth.config.auth;
+package com.wanghuiwen.core.config.authserver;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class AuthUser implements UserDetails {
+public class AuthUser implements UserDetails, Serializable {
     private String userName;
     private String password;
     private Long id;

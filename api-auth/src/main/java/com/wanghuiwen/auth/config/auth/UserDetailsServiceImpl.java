@@ -5,6 +5,7 @@ import com.wanghuiwen.auth.model.Role;
 import com.wanghuiwen.auth.model.User;
 import com.wanghuiwen.auth.service.PowerService;
 import com.wanghuiwen.auth.service.UserService;
+import com.wanghuiwen.core.config.authserver.AuthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,10 +30,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("======================loadUserByUsername::"+username+"=============");
+        logger.info("======================loadUserByUsername::" + username + "=============");
 
-        User user = userService.findBy("username",username);
-        if(user==null){
+        User user = userService.findBy("username", username);
+        if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
 
@@ -57,6 +58,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             }
         }
 
-        return new AuthUser(user.getUsername(), user.getPassword(), authorities, rolestr, user.getId(), user.getType(),user.getNickname(),user.getAvatar());
+        return new AuthUser(user.getUsername(), user.getPassword(), authorities, rolestr, user.getId(), user.getType(), user.getNickname(), user.getAvatar());
     }
 }

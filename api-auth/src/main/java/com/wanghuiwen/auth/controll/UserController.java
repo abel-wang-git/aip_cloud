@@ -2,7 +2,7 @@ package com.wanghuiwen.auth.controll;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wanghuiwen.auth.config.auth.AuthUser;
+import com.wanghuiwen.core.config.authserver.AuthUser;
 import com.wanghuiwen.core.annotation.PowerEnable;
 import com.wanghuiwen.core.controller.Ctrl;
 import com.wanghuiwen.core.response.Result;
@@ -19,6 +19,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
@@ -51,6 +52,12 @@ public class UserController extends Ctrl {
         user.setNickname(nickname);
         user.setAvatar(avatar);
         return userService.addVisitor(user);
+    }
+
+    @ApiOperation(value = "根据id获取用户", tags = {"账号管理"}, notes = "根据id获取用户")
+    @PostMapping(value = "/detail", name = "用户添加")
+    public Result add(@RequestParam Long id) {
+        return ResultGenerator.genSuccessResult(userService.findById(id));
     }
 
     @ApiOperation(value = "用户列表", tags = {"账号管理"}, notes = "用户列表")
@@ -95,10 +102,10 @@ public class UserController extends Ctrl {
 
     @ApiOperation(value = "获取登录用户信息", tags = {"账号管理"}, notes = "获取登录用户信息")
     @PostMapping(value = "get", name = "获取登录用户信息")
-    public Result get(Authentication authentication) {
-        AuthUser authUser = (AuthUser) authentication.getPrincipal();
-        authUser.setPassword("");
-        return ResultGenerator.genSuccessResult(authUser);
+    public Result get(OAuth2Authentication authentication) {
+        AuthUser s = (AuthUser) authentication.getPrincipal();
+//        authUser.setPassword("");
+        return ResultGenerator.genSuccessResult(s);
     }
 
     /**

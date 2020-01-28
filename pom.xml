@@ -16,6 +16,7 @@
         <module>api-hystrix-dashboard</module>
         <module>api-gateway</module>
         <module>api-common</module>
+        <module>api_blog</module>
     </modules>
 
     <parent>

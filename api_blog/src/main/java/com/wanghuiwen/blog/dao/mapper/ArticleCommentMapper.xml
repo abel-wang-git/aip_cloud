@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wanghuiwen.blog.dao.ArticleCommentMapper">
+    <resultMap id="BaseResultMap" type="com.wanghuiwen.blog.model.ArticleComment">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="comment_id" jdbcType="BIGINT" property="commentId"/>
+        <result column="p_id" jdbcType="BIGINT" property="pId"/>
+        <result column="article_id" jdbcType="BIGINT" property="articleId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="uid" jdbcType="BIGINT" property="uid"/>
+    </resultMap>
+
+    <select id="selectComment" parameterType="java.util.Map" resultType="com.wanghuiwen.blog.model.vo.ArticleCommentPojo">
+        select a.comment, a.comment_id as commentId, a.create_time as createTime, ifnull(u.nickname, '热心网友') as name, u.avatar
+        from (select * from article_comment where p_id = 0 and article_id = #{articleId}) a
+                 left join sys_user u on (a.uid = u.id) order by a.create_time desc
+    </select>
+    <select id="selectReComment" parameterType="java.util.Map" resultType="com.wanghuiwen.blog.model.vo.ArticleCommentReplyPojo">
+        select ifnull(u.nickname,'热心网友') as name ,a.pid,a.commentId, a.comment,a.createTime ,u.avatar
+        from (select p.comment_id     pid,
+                     c.comment_id     commentId,
+                     c.comment,
+                     c.create_time as createTime,
+                     c.uid
+              from article_comment p
+                       INNER JOIN article_comment c on (p.comment_id = c.p_id and p.article_id = #{articleId})) a
+                 left join sys_user u on (a.uid = u.id)
+    </select>
+</mapper>
