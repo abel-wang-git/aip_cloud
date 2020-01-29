@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.authserver.AuthorizationServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -16,20 +17,18 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties(AuthorizationServerProperties.class)
 public abstract class AbsResourceServerConfig implements ResourceServerConfigurer {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected List<String> whitelist = new ArrayList<>();
-
     @Resource
     private OAuth2ClientProperties oAuth2ClientProperties;
     @Resource
     private JwtAccessTokenConverter jwtAccessTokenConverter;
+    @Bean
+    abstract public WhiteList whiteList();
 
     private final AuthorizationServerProperties properties;
 
@@ -39,16 +38,6 @@ public abstract class AbsResourceServerConfig implements ResourceServerConfigure
     protected AbsResourceServerConfig(AuthorizationServerProperties properties) {
         this.properties = properties;
     }
-
-
-    private List<String> getWhitelist() {
-        return whitelist;
-    }
-
-    /**
-     * 设置白名单
-     */
-    protected abstract void setWhitelist();
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
@@ -84,7 +73,7 @@ public abstract class AbsResourceServerConfig implements ResourceServerConfigure
         @Override
         public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
             fsi.setAccessDecisionManager(new AuthAccessDecisionManager());
-            fsi.setSecurityMetadataSource(new AuthMetadataSource(getWhitelist()));
+            fsi.setSecurityMetadataSource(new AuthMetadataSource(whiteList()));
             return fsi;
         }
     }
