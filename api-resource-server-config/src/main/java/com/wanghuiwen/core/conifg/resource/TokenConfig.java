@@ -1,4 +1,4 @@
-package com.wanghuiwen.core.config.resource;
+package com.wanghuiwen.core.conifg.resource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

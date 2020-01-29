@@ -1,4 +1,4 @@
-package com.wanghuiwen.core.config.resource;
+package com.wanghuiwen.core.conifg.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

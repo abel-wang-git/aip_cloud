@@ -1,7 +1,7 @@
 package com.wanghuiwen.core.controller;
 
 import com.wanghuiwen.core.ServiceException;
-import com.wanghuiwen.core.config.authserver.AuthUser;
+import com.wanghuiwen.core.model.AuthUser;
 import org.springframework.security.core.Authentication;
 
 /**

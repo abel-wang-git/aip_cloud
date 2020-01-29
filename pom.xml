@@ -10,13 +10,14 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>apt-eureka</module>
+        <module>api-eureka</module>
         <module>api-auth</module>
         <module>api-consumer</module>
         <module>api-hystrix-dashboard</module>
         <module>api-gateway</module>
         <module>api-common</module>
         <module>api_blog</module>
+        <module>api-resource-server-config</module>
     </modules>
 
     <parent>
@@ -29,6 +30,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <api.package-version>1.0-SNAPSHOT</api.package-version>
     </properties>
 
     <dependencyManagement>
@@ -36,8 +38,14 @@
             <dependency>
                 <groupId>com.wanghuiwen</groupId>
                 <artifactId>api-common</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${api.package-version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.wanghuiwen</groupId>
+                <artifactId>api-resource-server-config</artifactId>
+                <version>${api.package-version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
@@ -139,6 +147,11 @@
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-xml</artifactId>
                 <version>2.10.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-xml-provider</artifactId>
+                <version>2.10.2</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>

@@ -3,6 +3,7 @@ package com.wanghuiwen.auth.config.auth;
 import com.wanghuiwen.auth.config.execption.AuthExceptionTranslator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,10 +14,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -42,16 +45,28 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Resource
     private UserDetailsServiceImpl userService;
 
-    @Resource
-    public TokenStore tokenStore;
-
     @Bean
     public ClientDetailsService jdbcClientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
 
     @Resource
-    public JwtAccessTokenConverter jwtAccessTokenConverter;
+    private RedisConnectionFactory redisConnectionFactory;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new RedisTokenStore(redisConnectionFactory);
+    }
+
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+        accessTokenConverter.setUserTokenConverter(new AuthUserAuthenticationConverter());
+        converter.setAccessTokenConverter(accessTokenConverter);
+        converter.setSigningKey("test_key");
+        return converter;
+    }
 
     /**
      * 使用密码模式需要配置
@@ -61,12 +76,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> delegates = new ArrayList<>();
 
-        delegates.add(jwtAccessTokenConverter);
+        delegates.add(jwtAccessTokenConverter());
         enhancerChain.setTokenEnhancers(delegates);
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userService)
-                .tokenStore(tokenStore) //配置令牌存储策略
-                .accessTokenConverter(jwtAccessTokenConverter)
+                .tokenStore(tokenStore()) //配置令牌存储策略
+                .accessTokenConverter(jwtAccessTokenConverter())
                 .tokenEnhancer(enhancerChain)
                 .exceptionTranslator(new AuthExceptionTranslator())
         ;
@@ -84,6 +99,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         //只允许验证用户访问令牌解析端点（/oauth/check_token）
         security.allowFormAuthenticationForClients();
         security.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()");
-                // 允许客户端发送表单来进行权限认证来获取令牌
+        // 允许客户端发送表单来进行权限认证来获取令牌
     }
 }

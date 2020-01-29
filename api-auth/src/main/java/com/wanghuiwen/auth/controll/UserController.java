@@ -2,9 +2,9 @@ package com.wanghuiwen.auth.controll;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wanghuiwen.core.config.authserver.AuthUser;
 import com.wanghuiwen.core.annotation.PowerEnable;
 import com.wanghuiwen.core.controller.Ctrl;
+import com.wanghuiwen.core.model.AuthUser;
 import com.wanghuiwen.core.response.Result;
 import com.wanghuiwen.core.response.ResultGenerator;
 import com.wanghuiwen.auth.model.Role;
@@ -21,8 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
-import tk.mybatis.mapper.entity.Condition;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -66,17 +64,13 @@ public class UserController extends Ctrl {
             @ApiImplicitParam(name = "page", value = "页数", dataType = "Integer", paramType = "query"),
             @ApiImplicitParam(name = "size", value = "条数", dataType = "Integer", paramType = "query"),
     })
-    @PostMapping(value = "/list", name = "用户列表")
+    @GetMapping(value = "/list", name = "用户列表")
     @ResponseBody
     public Result list(@RequestParam(defaultValue = "0") Integer page,
                        @RequestParam(defaultValue = "10") Integer size) {
         PageHelper.startPage(page, size);
 
-        Condition c = new Condition(User.class);
-        Example.Criteria criteria = c.createCriteria();
-
-
-        List<User> list = userService.findByCondition(c);
+        List<User> list = userService.findAll();
         return ResultGenerator.genSuccessResult(new PageInfo<>(list));
     }
 
@@ -103,9 +97,9 @@ public class UserController extends Ctrl {
     @ApiOperation(value = "获取登录用户信息", tags = {"账号管理"}, notes = "获取登录用户信息")
     @PostMapping(value = "get", name = "获取登录用户信息")
     public Result get(OAuth2Authentication authentication) {
-        AuthUser s = (AuthUser) authentication.getPrincipal();
-//        authUser.setPassword("");
-        return ResultGenerator.genSuccessResult(s);
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+        authUser.setPassword("");
+        return ResultGenerator.genSuccessResult(authUser);
     }
 
     /**

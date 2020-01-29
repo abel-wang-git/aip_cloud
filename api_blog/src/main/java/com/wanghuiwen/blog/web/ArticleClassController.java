@@ -1,8 +1,8 @@
 package com.wanghuiwen.blog.web;
 
 import com.wanghuiwen.core.annotation.PowerEnable;
-import com.wanghuiwen.core.config.authserver.AuthUser;
 import com.wanghuiwen.core.controller.Ctrl;
+import com.wanghuiwen.core.model.AuthUser;
 import com.wanghuiwen.core.response.Result;
 import com.wanghuiwen.core.response.ResultGenerator;
 import com.wanghuiwen.blog.model.ArticleClass;

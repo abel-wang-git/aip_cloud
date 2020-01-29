@@ -8,8 +8,8 @@ import com.wanghuiwen.blog.service.ArticleContentService;
 import com.wanghuiwen.blog.service.ArticleListService;
 import com.wanghuiwen.blog.service.ElasticsearchService;
 import com.wanghuiwen.core.annotation.PowerEnable;
-import com.wanghuiwen.core.config.authserver.AuthUser;
 import com.wanghuiwen.core.controller.Ctrl;
+import com.wanghuiwen.core.model.AuthUser;
 import com.wanghuiwen.core.response.Result;
 import com.wanghuiwen.core.response.ResultGenerator;
 import io.swagger.annotations.Api;
@@ -18,8 +18,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import tk.mybatis.mapper.entity.Condition;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;

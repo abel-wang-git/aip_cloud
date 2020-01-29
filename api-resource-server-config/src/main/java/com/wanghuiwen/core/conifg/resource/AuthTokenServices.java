@@ -1,4 +1,4 @@
-package com.wanghuiwen.core.config.resource;
+package com.wanghuiwen.core.conifg.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class AuthTokenServices extends DefaultTokenServices {
@@ -103,11 +103,7 @@ public class AuthTokenServices extends DefaultTokenServices {
         }
 
         String creds = String.format("%s:%s", clientId, clientSecret);
-        try {
-            return "Basic " + new String(Base64.encode(creds.getBytes("UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("Could not convert String");
-        }
+        return "Basic " + new String(Base64.encode(creds.getBytes(StandardCharsets.UTF_8)));
     }
 
     private Map<String, Object> postForMap(String path, MultiValueMap<String, String> formData, HttpHeaders headers) {

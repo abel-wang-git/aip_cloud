@@ -1,4 +1,4 @@
-package com.wanghuiwen.core.config.authserver;
+package com.wanghuiwen.core.model;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,4 +1,4 @@
-package com.wanghuiwen.core.config.resource;
+package com.wanghuiwen.core.conifg.resource;
 
 import com.wanghuiwen.core.response.Result;
 import com.wanghuiwen.core.response.ResultGenerator;

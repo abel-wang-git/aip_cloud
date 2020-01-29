@@ -1,6 +1,6 @@
 package com.wanghuiwen.auth.config;
 
-import com.wanghuiwen.core.config.resource.AbsResourceServerConfig;
+import com.wanghuiwen.core.conifg.resource.AbsResourceServerConfig;
 import org.springframework.boot.autoconfigure.security.oauth2.authserver.AuthorizationServerProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -8,7 +8,7 @@ import com.wanghuiwen.blog.model.ArticleLike;
 import com.wanghuiwen.blog.model.ArticleList;
 import com.wanghuiwen.blog.service.ArticleContentService;
 import com.wanghuiwen.blog.service.UserService;
-import com.wanghuiwen.core.config.authserver.AuthUser;
+import com.wanghuiwen.core.model.AuthUser;
 import com.wanghuiwen.core.response.Result;
 import com.wanghuiwen.core.response.ResultGenerator;
 import com.wanghuiwen.core.service.AbstractService;

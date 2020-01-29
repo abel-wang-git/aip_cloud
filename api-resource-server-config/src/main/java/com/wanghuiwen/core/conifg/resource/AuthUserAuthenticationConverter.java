@@ -1,6 +1,6 @@
-package com.wanghuiwen.core.config.resource;
+package com.wanghuiwen.core.conifg.resource;
 
-import com.wanghuiwen.core.config.authserver.AuthUser;
+import com.wanghuiwen.core.model.AuthUser;
 import com.wanghuiwen.util.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class AuthUserAuthenticationConverter implements UserAuthenticationConver
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
         Map<String, Object> response = new LinkedHashMap<String, Object>();
         AuthUser user =  (AuthUser) authentication.getPrincipal();
-        response.put(USERNAME,JSONUtils.obj2json(user));
+        response.put(USERNAME, JSONUtils.obj2json(user));
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }
@@ -33,7 +33,7 @@ public class AuthUserAuthenticationConverter implements UserAuthenticationConver
     @Override
     public Authentication extractAuthentication(Map<String, ?> map) {
         if (map.containsKey(USERNAME)) {
-            Object principal = null;
+            Object principal;
             try {
                 String json = map.get(USERNAME).toString();
                 principal = JSONUtils.json2pojo(json,AuthUser.class);

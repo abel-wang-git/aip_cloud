@@ -1,10 +1,7 @@
 package com.wanghuiwen.auth.config.resource;
 
 import com.wanghuiwen.auth.model.SysWhitelist;
-import com.wanghuiwen.auth.service.PowerService;
 import com.wanghuiwen.auth.service.SysWhitelistService;
-import com.wanghuiwen.core.config.resource.AuthExceptionEntryPoint;
-import com.wanghuiwen.core.config.resource.ResourceAccessDeniedHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
